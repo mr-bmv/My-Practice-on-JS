@@ -12,7 +12,7 @@ assert.equal(length(log), 5);
 
 // step ((health1, health2), message)
 
-cosnt step1 = get(1, log);  // тоже самое
+cosnt step1 = get(1, log);  
 assert.equal(toString(car(step1)), '(10,10)');
 cosnt step2 = get(2, log);
 assert.equal(toString(car(step2)), '(10,4)');
@@ -30,32 +30,24 @@ import { cons as consList, l, random, head, reverse, toString as listToString } 
 const run = (player1, player2, cards) => {
   const iter = (health1, name1, health2, name2, order, log) => {
     // BEGIN (write your solution here)
-    if(health1 <= 0 || health2 <=0 ){
-  return consList(cons(cons(health1, health2), 'GAME OVER!!!'), log);
-}
 
-if(order === 6){
-  return consList(cons(health1, health2), 'GAME OVER!!!');
-}
-const card = random(cards);
-const damage = cdr(card)();
+      if (health1 <= 0 || health2 <= 0) {
+        return consList(cons(cons(health1, health2), "GAME OVER"), log);
+      }
 
-const cardName = car(card);
+      const yourCard = random(cards);
+      const damadge = cdr(yourCard)();// cdr(head(yourCard));
+      const cardName = car(yourCard);
+    	const NewHealth1 = order === 1 ? health1 : health1 - damadge;
+      const NewHealth2 = order === 1 ? health2 - damadge : health2;
 
+      const message = `Игрок '${name1}' применил '${cardName}'
+      против '${name2}' и нанес урон '${damage}'`;
 
-const message = order % 2 === 1 ? `Игрок '${name1}' применил '${cardName}'
-против '${name2}' и нанес урон '${damage}'`: `Игрок '${name2}'
-применил '${cardName}'  против '${name1}' и нанес урон '${damage}'`;
+      const NewOrder = order === 1 ? 2 : 1;
 
-
-const NewHealth1 =  order % 2 === 1 ? health1 : health1 - damage;
-const NewHealth2 =  order % 2 === 0 ? health2 : health2 - damage;
-
-const NewOrder = order + 1;
-
-const logItem = consList(cons(cons(NewHealth1, NewHealth2), message), log);
-
-  return iter(NewHealth1, name1, NewHealth2, name2, NewOrder, logItem);
+      const NewLog = consList(cons(cons(NewHealth1, NewHealth2), message), log);
+      return iter(NewHealth1, name1, NewHealth2, name2, NewOrder, NewLog)
     // END
   };
 
@@ -64,6 +56,6 @@ const logItem = consList(cons(cons(NewHealth1, NewHealth2), message), log);
   return reverse(iter(startHealth, player1, startHealth, player2, 1, l(logItem))); // при выводе на экран всё должно быть в обраном порядке так как используем iter и cons поднимаемся из глубины.
 };
 
-export default cards =>
+export default cards =>  // это не функция cards, это NoName функция с аргументом cards
   (name1, name2) =>
     run(name1, name2, cards);
