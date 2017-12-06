@@ -36,7 +36,7 @@ const run = (player1, player2, cards) => {
       }
 
       const yourCard = random(cards);
-      const damadge = cdr(yourCard)();// cdr(head(yourCard));
+      const damadge = cdr(yourCard)();// 
       const cardName = car(yourCard);
     	const NewHealth1 = order === 1 ? health1 : health1 - damadge;
       const NewHealth2 = order === 1 ? health2 - damadge : health2;
